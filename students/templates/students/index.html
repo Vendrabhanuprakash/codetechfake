@@ -233,6 +233,8 @@
                 <div class="section-title">Enter Student Details</div>
 
                 <form id="studentForm">
+                    {% csrf_token %}
+
                     <label for="studentName">Student Name</label>
                     <input
                         type="text"
@@ -326,23 +328,27 @@
         function setText(elementId, value) {
             document.getElementById(elementId).textContent = value;
         }
-
+        
         function getCookie(name) {
-            const cookies = document.cookie.split(";");
-
-            for (const cookie of cookies) {
-                const trimmed = cookie.trim();
-
-                if (trimmed.startsWith(name + "=")) {
-                    return decodeURIComponent(
-                        trimmed.substring(name.length + 1)
-                    );
+            let cookieValue = null;
+        
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+        
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+        
+                    if (cookie.startsWith(name + "=")) {
+                        cookieValue = decodeURIComponent(
+                            cookie.substring(name.length + 1)
+                        );
+                        break;
+                    }
                 }
             }
-
-            return null;
+        
+            return cookieValue;
         }
-
         // Save student details in Django, then generate the QR code.
         form.addEventListener("submit", async function(event) {
             event.preventDefault();
