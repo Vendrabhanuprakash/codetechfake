@@ -1,4 +1,3 @@
-
 from django.urls import path
 from . import views
 
@@ -10,7 +9,7 @@ urlpatterns = [
         name="create_certificate"
     ),
     path(
-        "verify/<uuid:certificate_id>/",
+        "verify/<str:certificate_id>/",
         views.verify_certificate,
         name="verify_certificate"
     ),
