@@ -13,10 +13,12 @@ from django.views.decorators.csrf import csrf_protect
 
 from .models import StudentCertificate
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.shortcuts import render
 
+@ensure_csrf_cookie
 def index(request):
     return render(request, "students/index.html")
-
 
 @require_POST
 @csrf_protect
