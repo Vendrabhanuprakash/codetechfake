@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Certificate Verification</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #5A2D82 0%, #1F3B73 50%, #3B82F6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #5A2D82 0%, #1F3B73 50%, #3B82F6 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .valid-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .content {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.97);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F3B73;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3B82F6;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F3B73;
+            margin: 15px 0 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: 2px solid #3B82F6;
+            border-color: transparent;
+        }
+
+        button {
+            display: inline-block;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            margin: 12px 5px 0 0;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.95;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+            transform: none;
+        }
+
+        .certificate-id {
+            background: linear-gradient(135deg, #5A2D82 0%, #1F3B73 50%, #3B82F6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .id-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .id-value {
+            font-size: 22px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        #qr {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 15px;
+            background: white;
+            border: 1px solid #eee;
+        }
+
+        #qr img, #qr canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .note {
+            color: #555;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 15px;
+            overflow-wrap: anywhere;
+        }
+
+        .error {
+            color: #991b1b;
+            background: #fee2e2;
+        }
+
+        .success {
+            color: #166534;
+            background: #dcfce7;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            background: rgba(26, 26, 26, 0.4);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 550px) {
+            .content {
+                padding: 24px;
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+
+            .id-value {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header">
+            <h1>Student Certificate Verification</h1>
+            <div class="valid-badge">STUDENT RECORD PORTAL</div>
+        </div>
+
+        <div class="content">
+
+            <!-- STUDENT FORM -->
+            <div class="section">
+                <div class="section-title">Enter Student Details</div>
+
+                <form id="studentForm">
+                    <label for="studentName">Student Name</label>
+                    <input
+                        type="text"
+                        id="studentName"
+                        name="studentName"
+                        placeholder="Enter student's full name"
+                        maxlength="100"
+                        required
+                    >
+
+                    <label for="courseName">Course Name</label>
+                    <input
+                        type="text"
+                        id="courseName"
+                        name="courseName"
+                        placeholder="Enter course name"
+                        maxlength="150"
+                        required
+                    >
+
+                    <label for="startDate">Internship Start Date</label>
+                    <input
+                        type="date"
+                        id="startDate"
+                        name="startDate"
+                        required
+                    >
+
+                    <button type="submit" id="generateButton">
+                        Generate QR Code
+                    </button>
+                </form>
+
+                <div id="message" class="message hidden" role="status"></div>
+            </div>
+
+            <!-- QR RESULT -->
+            <div class="section hidden" id="result">
+                <div class="section-title">Generated Student QR Code</div>
+
+                <div class="certificate-id">
+                    <div class="id-label">Certificate ID</div>
+                    <div class="id-value" id="generatedId"></div>
+                </div>
+
+                <div id="qr"></div>
+
+                <p class="note">
+                    Scan the QR code to open the student's saved record.
+                </p>
+
+                <button type="button" id="copyButton">
+                    Copy Verification Link
+                </button>
+
+                <button type="button" id="openButton">
+                    Open Verification Page
+                </button>
+
+                <p class="note">
+                    Your record is saved by the Django server before the
+                    QR code is displayed.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            Student Certificate Verification Portal
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("studentForm");
+        const generateButton = document.getElementById("generateButton");
+        const result = document.getElementById("result");
+        const message = document.getElementById("message");
+
+        let verificationLink = "";
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = "message " + type;
+        }
+
+        function hideMessage() {
+            message.textContent = "";
+            message.className = "message hidden";
+        }
+
+        function setText(elementId, value) {
+            document.getElementById(elementId).textContent = value;
+        }
+
+        function getCookie(name) {
+            const cookies = document.cookie.split(";");
+
+            for (const cookie of cookies) {
+                const trimmed = cookie.trim();
+
+                if (trimmed.startsWith(name + "=")) {
+                    return decodeURIComponent(
+                        trimmed.substring(name.length + 1)
+                    );
+                }
+            }
+
+            return null;
+        }
+
+        // Save student details in Django, then generate the QR code.
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+            hideMessage();
+
+            const name = document.getElementById("studentName")
+                .value.trim();
+
+            const course = document.getElementById("courseName")
+                .value.trim();
+
+            const startDate = document.getElementById("startDate").value;
+
+            if (!name || !course || !startDate) {
+                showMessage("Please fill in all three fields.", "error");
+                return;
+            }
+
+            if (typeof QRCode === "undefined") {
+                showMessage(
+                    "QR library could not load. Check your internet connection.",
+                    "error"
+                );
+                return;
+            }
+
+            generateButton.disabled = true;
+            generateButton.textContent = "Saving Record...";
+
+            try {
+                const csrfToken = getCookie("csrftoken");
+
+                if (!csrfToken) {
+                    throw new Error(
+                        "CSRF token missing. Open this form through Django, not as a local HTML file."
+                    );
+                }
+
+                const response = await fetch("/create-certificate/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        course: course,
+                        startDate: startDate
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.error || "Unable to save the student record."
+                    );
+                }
+
+                if (!data.id || !data.verification_url) {
+                    throw new Error(
+                        "The server did not return the certificate ID and verification link."
+                    );
+                }
+
+                // This URL comes from Django and identifies the saved record.
+                verificationLink = data.verification_url;
+
+                setText("generatedId", data.id);
+
+                // Clear an earlier QR code before making another.
+                document.getElementById("qr").replaceChildren();
+
+                new QRCode(document.getElementById("qr"), {
+                    text: verificationLink,
+                    width: 220,
+                    height: 220,
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                result.classList.remove("hidden");
+
+                showMessage(
+                    "Student record saved successfully. QR code generated.",
+                    "success"
+                );
+
+            } catch (error) {
+                showMessage(
+                    error.message || "Something went wrong.",
+                    "error"
+                );
+            } finally {
+                generateButton.disabled = false;
+                generateButton.textContent = "Generate QR Code";
+            }
+        });
+
+        // Copy the permanent verification link.
+        document.getElementById("copyButton")
+            .addEventListener("click", async function() {
+                if (!verificationLink) return;
+
+                try {
+                    await navigator.clipboard.writeText(verificationLink);
+
+                    showMessage(
+                        "Verification link copied successfully.",
+                        "success"
+                    );
+                } catch (error) {
+                    window.prompt(
+                        "Copy the verification link:",
+                        verificationLink
+                    );
+                }
+            });
+
+        // Open the Django verification page.
+        document.getElementById("openButton")
+            .addEventListener("click", function() {
+                if (verificationLink) {
+                    window.location.href = verificationLink;
+                }
+            });
+    </script>
+</body>
+</html>

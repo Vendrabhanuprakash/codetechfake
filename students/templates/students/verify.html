@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification - {{ student.student_name }}</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #5A2D82 0%, #1F3B73 50%, #3B82F6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #5A2D82 0%, #1F3B73 50%, #3B82F6 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .valid-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .content {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F3B73;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3B82F6;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #1F3B73;
+            font-weight: 500;
+            overflow-wrap: anywhere;
+        }
+
+        .certificate-id {
+            background: linear-gradient(135deg, #5A2D82 0%, #1F3B73 50%, #3B82F6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .certificate-id .id-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .certificate-id .id-value {
+            font-size: 24px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            background: rgba(26, 26, 26, 0.4);
+        }
+
+        @media (max-width: 550px) {
+            .content {
+                padding: 24px;
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+
+            .certificate-id .id-value {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header">
+            {% if student.is_verified %}
+                <h1>✓ Valid Certificate Verified</h1>
+                <div class="valid-badge">VERIFIED</div>
+            {% else %}
+                <h1>Certificate Verification Pending</h1>
+                <div class="valid-badge">NOT YET VERIFIED</div>
+            {% endif %}
+        </div>
+
+        <div class="content">
+
+            <div class="certificate-id">
+                <div class="id-label">Certificate ID</div>
+                <div class="id-value">{{ student.certificate_id }}</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Student Information</div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Student Name</div>
+                        <div class="info-value">
+                            {{ student.student_name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Course Details</div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Course Name</div>
+                        <div class="info-value">
+                            {{ student.course_name }}
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">Category</div>
+                        <div class="info-value">Internship</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">Duration</div>
+                        <div class="info-value">6 Weeks</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">COMPANY NAME</div>
+                        <div class="info-value">
+                            CODTECH IT SOLUTIONS PRIVATE LIMITED
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Internship Period</div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Start Date</div>
+                        <div class="info-value">
+                            {{ student.start_date|date:"d F Y" }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            {% if student.is_verified %}
+                <p>This certificate has been verified and is authentic.</p>
+            {% else %}
+                <p>This record has not yet been verified by an authorized administrator.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+</html>
